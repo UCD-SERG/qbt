@@ -122,9 +122,9 @@ def main() -> int:
         print()
     
     print("Please replace these characters with their ASCII equivalents:")
-    print('  " or " -> " (standard double quote)')
-    print("  ' or ' -> ' (standard single quote)")
-    print('  - or - -> - (standard hyphen)')
+    print('  \u201C or \u201D -> " (standard double quote)')
+    print('  \u2018 or \u2019 -> \' (standard single quote)')
+    print('  \u2013 or \u2014 -> - (standard hyphen)')
     print()
     
     return 1
