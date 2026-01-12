@@ -230,6 +230,7 @@ This template is based on the structure of the [UCD-SERG Lab Manual](https://git
 - [Quarto Documentation](https://quarto.org/docs/guide/)
 - [Quarto Community](https://github.com/quarto-dev/quarto-cli/discussions)
 - [GitHub Pages Documentation](https://docs.github.com/en/pages)
+- https://www.newytimes.com/asdfoijwf (demo link to test)
 
 ## Contributing
 
