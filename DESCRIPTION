@@ -1,0 +1,9 @@
+Package: quartobook
+Type: Book
+Title: Quarto Book Template
+Version: 0.0.1
+Description: A template repository for creating books with Quarto
+Maintainer: Your Name <your.email@example.com>
+Author: Your Name
+Language: en-US
+Encoding: UTF-8
