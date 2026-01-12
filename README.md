@@ -129,9 +129,7 @@ Automatically builds and deploys your book to GitHub Pages when you push to the 
 Automatically checks that all URLs in your book are reachable:
 - **Runs on**: Push to main, pull requests, weekly schedule (Mondays at 9:00 UTC), and manual trigger
 - **Checks**: All links in `.qmd`, `.md`, and `.html` files
-- **Reports**: 
-  - On pull requests: Comments on the PR with recommended fixes
-  - On main branch: Creates GitHub issues when broken links are detected
+- **Reports**: Workflow fails if broken links are detected. Check the workflow logs for details on which links are broken.
 - **Configuration**: Customize behavior in `lychee.toml`
 
 To manually trigger the link checker:
