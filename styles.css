@@ -1,0 +1,38 @@
+/* Custom styles for your Quarto book */
+
+/* Add your custom CSS here to override default styles */
+
+/* Example: Customize heading colors */
+/*
+h1 {
+  color: #2c3e50;
+}
+
+h2 {
+  color: #34495e;
+}
+*/
+
+/* Example: Add custom margin to paragraphs */
+/*
+p {
+  margin-bottom: 1.2em;
+}
+*/
+
+/* Example: Style code blocks */
+/*
+pre {
+  background-color: #f6f8fa;
+  border-radius: 6px;
+  padding: 16px;
+}
+*/
+
+/* Example: Customize callout boxes */
+/*
+.callout {
+  border-left: 4px solid #007bff;
+  padding-left: 1em;
+}
+*/
