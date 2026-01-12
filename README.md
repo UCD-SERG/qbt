@@ -12,6 +12,10 @@ A template repository for creating books with [Quarto](https://quarto.org/). Thi
 - 📑 **Bibliography support** with BibTeX integration
 - 🔢 **Automatic numbering** of sections and cross-references
 - 💅 **Custom CSS** for styling your book
+- 🔍 **PR Preview** with change highlighting for pull requests
+- ✅ **Automated checks** including spell checking and linting
+- 🤖 **GitHub Copilot integration** with custom setup steps
+- 📝 **AI-powered issue summaries** for new issues
 
 ## Quick Start
 
@@ -97,6 +101,57 @@ This template includes a GitHub Actions workflow (`.github/workflows/publish.yml
 
 4. **Access your book** at: `https://YOUR-USERNAME.github.io/YOUR-REPO/`
 
+## GitHub Actions Workflows
+
+This template includes several automated workflows to enhance your development experience:
+
+### 🚀 Publish Workflow (`publish.yml`)
+
+Automatically builds and deploys your book to GitHub Pages when you push to the main branch.
+
+**Triggers:** Push to main branch, manual dispatch
+
+### 🔍 PR Preview Workflow (`preview.yml`)
+
+Creates a preview deployment for pull requests with:
+- Change detection and highlighting
+- DOCX files with tracked changes
+- Visual indicators for modified chapters
+- Banner showing what changed in the PR
+
+**Triggers:** PR opened, reopened, synchronized, closed, labeled, or unlabeled
+
+**Labels:**
+- Add `no-preview-highlights` label to disable change highlighting if it's glitchy
+
+### ✅ Spell Check Workflow (`check-spelling.yaml`)
+
+Runs automated spell checking on pushes and pull requests to maintain content quality.
+
+**Triggers:** Push to main, pull requests
+
+### 📋 Lint Project Workflow (`lint-project.yaml`)
+
+Checks R code style and quality using the lintr package.
+
+**Triggers:** Push to main/master, pull requests
+
+**Note:** Only runs if your project contains R code.
+
+### 🤖 Copilot Setup Steps (`copilot-setup-steps.yml`)
+
+Configures the GitHub Copilot coding agent's environment with Quarto and TinyTeX.
+
+**Triggers:** Workflow dispatch, changes to the setup file
+
+### 📝 Issue Summary Workflow (`summary.yml`)
+
+Automatically generates AI-powered summaries for newly opened issues.
+
+**Triggers:** New issue opened
+
+**Permissions required:** The `models: read` permission for AI inference
+
 ## Project Structure
 
 ```
@@ -113,8 +168,19 @@ This template includes a GitHub Actions workflow (`.github/workflows/publish.yml
 ├── LICENSE                  # CC0 1.0 Universal License
 ├── README.md               # This file
 └── .github/
-    └── workflows/
-        ├── publish.yml      # GitHub Pages deployment workflow
+    ├── scripts/             # Python scripts for PR preview features
+    │   ├── add-home-banner.py
+    │   ├── create-docx-tracked-changes.py
+    │   ├── detect-changed-chapters.py
+    │   ├── highlight-html-changes.py
+    │   └── inject-preview-metadata.py
+    └── workflows/           # GitHub Actions workflows
+        ├── publish.yml      # Build and deploy to GitHub Pages
+        ├── preview.yml      # PR preview with change highlighting
+        ├── check-spelling.yaml  # Spell checking
+        ├── lint-project.yaml    # R code linting
+        ├── copilot-setup-steps.yml  # GitHub Copilot setup
+        └── summary.yml      # AI-powered issue summaries
         └── check-links.yml  # URL reachability checker workflow
 ```
 

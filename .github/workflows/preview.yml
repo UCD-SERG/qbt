@@ -1,0 +1,82 @@
+name: Quarto Preview
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
+      - labeled
+      - unlabeled
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch full history for git diff
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          tinytex: true
+
+      - name: Render
+        uses: quarto-dev/quarto-actions/render@v2
+
+      # Detect which chapters have changed and optionally disable highlighting
+      # based on the 'no-preview-highlights' PR label
+      - name: Detect changed chapters (based on rendered files)
+        run: python3 .github/scripts/detect-changed-chapters.py
+        env:
+          HTML_DIR: ./docs
+          # Set to 'true' if PR has 'no-preview-highlights' label
+          DISABLE_PREVIEW_HIGHLIGHTS: ${{ contains(github.event.pull_request.labels.*.name, 'no-preview-highlights') }}
+
+      - name: Inject preview metadata
+        if: env.PREVIEW_SHOW_HIGHLIGHTS == 'true'
+        run: python3 .github/scripts/inject-preview-metadata.py
+
+      - name: Re-render with metadata
+        if: env.PREVIEW_SHOW_HIGHLIGHTS == 'true'
+        uses: quarto-dev/quarto-actions/render@v2
+
+      - name: Install python-docx for DOCX comparison
+        if: env.PREVIEW_SHOW_HIGHLIGHTS == 'true'
+        run: pip install python-docx
+
+      - name: Highlight HTML content changes
+        if: env.PREVIEW_SHOW_HIGHLIGHTS == 'true'
+        run: |
+          echo "Changed chapters:"
+          echo "${{ env.PREVIEW_CHANGED_CHAPTERS }}"
+          python3 .github/scripts/highlight-html-changes.py
+        env:
+          HTML_DIR: ./docs
+          PREVIEW_CHANGED_CHAPTERS: ${{ env.PREVIEW_CHANGED_CHAPTERS }}
+
+      - name: Create DOCX with tracked changes
+        run: python3 .github/scripts/create-docx-tracked-changes.py
+        env:
+          DOCX_DIR: ./docs
+
+      - name: Add home page banner
+        run: python3 .github/scripts/add-home-banner.py
+        env:
+          HTML_DIR: ./docs
+          PREVIEW_CHANGED_CHAPTERS: ${{ env.PREVIEW_CHANGED_CHAPTERS }}
+
+      - name: Deploy PR Preview
+        uses: rossjrw/pr-preview-action@main
+        with:
+          source-dir: ./docs/
+          # Deploy on label changes too, not just open/reopen/synchronize
+          # The 'auto' action ignores label events, so we explicitly set 'deploy' for non-closed PRs
+          action: ${{ github.event.action == 'closed' && 'remove' || 'deploy' }}
+        

@@ -62,6 +62,14 @@ Thumbs.db
 *.swo
 *~
 
+# renv files
+renv/library/
+renv/local/
+renv/cellar/
+renv/lock/
+renv/python/
+renv/sandbox/
+renv/staging/
 # Lychee link checker
 .lycheecache/
 lychee-output/
