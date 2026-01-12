@@ -55,6 +55,9 @@ def check_file(file_path: Path) -> List[Tuple[int, int, str, str]]:
                             char,
                             NON_STANDARD_CHARS[char]
                         ))
+    except UnicodeDecodeError as e:
+        print(f"Error: {file_path} has encoding issues: {e}", file=sys.stderr)
+        return []
     except Exception as e:
         print(f"Error reading {file_path}: {e}", file=sys.stderr)
         return []
