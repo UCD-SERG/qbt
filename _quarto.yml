@@ -7,7 +7,7 @@ book:
   author: "Your Name"
   date: last-modified
   date-format: "[Last updated:] YYYY-MM-DD"
-  repo-url: https://github.com/YOUR-USERNAME/YOUR-REPO
+  repo-url: https://github.com/UCD-SERG/quarto-book-template
   repo-actions: [edit, source, issue]
   downloads: [pdf, epub, docx]
   chapters:
