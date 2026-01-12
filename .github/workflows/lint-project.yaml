@@ -21,8 +21,8 @@ jobs:
         with:
           use-public-rspm: true
 
-      - name: Install lintr
-        run: install.packages("lintr", repos = "https://packagemanager.posit.co/cran/__linux__/noble/latest")
+      - name: Install lintr and dependencies
+        run: install.packages(c("lintr", "withr"), repos = "https://packagemanager.posit.co/cran/__linux__/noble/latest")
         shell: Rscript {0}
 
       - name: Lint root directory
