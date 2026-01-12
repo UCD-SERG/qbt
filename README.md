@@ -83,9 +83,7 @@ This template includes a GitHub Actions workflow (`.github/workflows/publish.yml
 
 1. **Enable GitHub Pages** in your repository:
    - Go to Settings → Pages
-   - Under "Source", select "Deploy from a branch"
-   - Select the `gh-pages` branch and `/ (root)` folder
-   - Click "Save"
+   - Under "Build and deployment", set Source to "GitHub Actions"
 
 2. **Push to main branch**:
    ```bash
