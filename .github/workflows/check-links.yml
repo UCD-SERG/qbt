@@ -43,12 +43,13 @@ jobs:
           Please review the workflow logs above for details on which links are broken.
 
           This issue was automatically created by the link checker workflow.
+
+          @copilot please fix the broken links found in the main branch.
           EOF
           )
           gh issue create \
             --title "Broken links detected in main branch" \
             --body "$BODY" \
-            --assignee copilot \
-            --label "bug,automated"
+            --label "bug,automated,copilot"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
