@@ -179,9 +179,9 @@ Validates that all books and articles in bibliography files meet DOI requirement
 ├── LICENSE                  # CC0 1.0 Universal License
 ├── README.md               # This file
 └── .github/
-    ├── scripts/             # Python scripts for PR preview features
+    ├── scripts/             # Scripts for workflows
     │   ├── add-home-banner.py
-    │   ├── check-bibliography-dois.py
+    │   ├── check-bibliography-dois.R
     │   ├── create-docx-tracked-changes.py
     │   ├── detect-changed-chapters.py
     │   ├── highlight-html-changes.py
