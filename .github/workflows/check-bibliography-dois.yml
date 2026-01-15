@@ -21,10 +21,18 @@ jobs:
         with:
           use-public-rspm: true
 
-      - name: Install R dependencies
-        run: |
-          install.packages(c("bib2df", "httr", "jsonlite", "stringr"), repos = "https://cloud.r-project.org")
-        shell: Rscript {0}
+      - uses: r-lib/actions/setup-r-dependencies@HEAD
+        with:
+          needs: |
+            connect
+            website
+          extra-packages: |
+            any::pkgdown
+            any::rmarkdown
+            any::bib2df
+            any::httr
+            any::jsonlite
+            any::stringr
 
       - name: Find bibliography files
         id: find-bibs
