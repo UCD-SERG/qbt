@@ -15,11 +15,13 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      issues: write
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
       - name: Check links in markdown and HTML files
+        id: lychee
         uses: lycheeverse/lychee-action@v2
         with:
           # Check all .qmd (Quarto markdown), .md (markdown), and .html files
@@ -28,3 +30,26 @@ jobs:
           fail: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create issue on main branch if links are broken
+        if: failure() && github.ref == 'refs/heads/main'
+        run: |
+          # Create issue with broken link details
+          BODY=$(cat <<'EOF'
+          The link checker found broken links in the main branch.
+
+          **Workflow Run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+          Please review the workflow logs above for details on which links are broken.
+
+          This issue was automatically created by the link checker workflow.
+
+          @copilot please fix the broken links found in the main branch.
+          EOF
+          )
+          gh issue create \
+            --title "Broken links detected in main branch" \
+            --body "$BODY" \
+            --label "bug,automated,copilot"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
