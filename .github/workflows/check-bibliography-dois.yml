@@ -1,0 +1,40 @@
+name: Check Bibliography DOIs
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check-dois:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Find bibliography files
+        id: find-bibs
+        run: |
+          # Find all .bib files in the repository
+          BIB_FILES=$(find . -name "*.bib" -not -path "./.git/*" | tr '\n' ' ')
+          echo "Found bibliography files: $BIB_FILES"
+          echo "bib_files=$BIB_FILES" >> $GITHUB_OUTPUT
+
+      - name: Check bibliography DOIs
+        if: steps.find-bibs.outputs.bib_files != ''
+        run: |
+          python3 .github/scripts/check-bibliography-dois.py ${{ steps.find-bibs.outputs.bib_files }}
+
+      - name: Summary
+        if: success()
+        run: |
+          echo "✓ All bibliography entries have valid DOIs"

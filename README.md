@@ -152,6 +152,17 @@ Automatically generates AI-powered summaries for newly opened issues.
 
 **Permissions required:** The `models: read` permission for AI inference
 
+### 📚 Check Bibliography DOIs Workflow (`check-bibliography-dois.yml`)
+
+Validates that all books and articles in bibliography files meet DOI requirements:
+- Every book and article must have a DOI field
+- Every DOI must resolve to a valid URL
+- Reference information is checked against DOI metadata for consistency
+
+**Triggers:** Push to main, pull requests, manual dispatch
+
+**Note:** This helps maintain high-quality bibliographic references and ensures all citations are properly traceable.
+
 ## Project Structure
 
 ```
@@ -170,6 +181,7 @@ Automatically generates AI-powered summaries for newly opened issues.
 └── .github/
     ├── scripts/             # Python scripts for PR preview features
     │   ├── add-home-banner.py
+    │   ├── check-bibliography-dois.py
     │   ├── create-docx-tracked-changes.py
     │   ├── detect-changed-chapters.py
     │   ├── highlight-html-changes.py
@@ -180,8 +192,9 @@ Automatically generates AI-powered summaries for newly opened issues.
         ├── check-spelling.yaml  # Spell checking
         ├── lint-project.yaml    # R code linting
         ├── copilot-setup-steps.yml  # GitHub Copilot setup
-        └── summary.yml      # AI-powered issue summaries
-        └── check-links.yml  # URL reachability checker workflow
+        ├── summary.yml      # AI-powered issue summaries
+        ├── check-links.yml  # URL reachability checker workflow
+        └── check-bibliography-dois.yml  # Bibliography DOI validation
 ```
 
 ## Automated Workflows
