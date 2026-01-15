@@ -32,7 +32,9 @@ jobs:
       - name: Check bibliography DOIs
         if: steps.find-bibs.outputs.bib_files != ''
         run: |
-          python3 .github/scripts/check-bibliography-dois.py ${{ steps.find-bibs.outputs.bib_files }}
+          python3 .github/scripts/check-bibliography-dois.py ${BIB_FILES}
+        env:
+          BIB_FILES: ${{ steps.find-bibs.outputs.bib_files }}
 
       - name: Summary
         if: success()

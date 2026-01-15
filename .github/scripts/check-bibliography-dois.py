@@ -24,7 +24,8 @@ def parse_bibtex_file(filepath: Path) -> List[Dict[str, any]]:
     
     entries = []
     # Match BibTeX entries: @type{key, ...}
-    pattern = r'@(\w+)\{([^,]+),\s*(.*?)\n\}'
+    # Pattern matches from @ to the closing brace, handling multiline content
+    pattern = r'@(\w+)\{([^,]+),\s*((?:[^{}]|\{[^}]*\})*)\}'
     matches = re.finditer(pattern, content, re.DOTALL)
     
     for match in matches:
@@ -125,7 +126,8 @@ def get_doi_metadata(doi: str) -> Optional[Dict[str, any]]:
             if response.getcode() == 200:
                 data = json.loads(response.read().decode('utf-8'))
                 return data.get('message', {})
-    except:
+    except Exception:
+        # Failed to fetch metadata, return None
         pass
     
     return None
