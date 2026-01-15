@@ -18,10 +18,13 @@ The template includes GitHub Actions workflows for publishing, link checking, an
 ✅ **Do** use bullet lists instead:
 ```
 The template includes GitHub Actions workflows for:
+
 - Publishing
 - Link checking
 - Spell checking
 ```
+
+Always put a blank line before the start of a bullet-point list in markdown (`.md`) files and variants (especially Quarto `.qmd` files).
 
 **When to use your judgment:**
 
