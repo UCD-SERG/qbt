@@ -11,6 +11,9 @@ suppressPackageStartupMessages({
   library(stringr)
 })
 
+# User agent to use for HTTP requests (realistic Chrome browser string)
+USER_AGENT <- "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+
 #' Parse BibTeX file and extract entries
 #'
 #' @param filepath Path to BibTeX file
@@ -48,8 +51,9 @@ check_doi_field <- function(entry) {
 #' Validate that a DOI resolves to a valid URL
 #'
 #' @param doi DOI string
+#' @param retry_on_403 Whether to retry on 403 errors (default TRUE)
 #' @return List with is_valid, error_message, and status_code
-validate_doi_url <- function(doi) {
+validate_doi_url <- function(doi, retry_on_403 = TRUE) {
   # Clean up DOI
   doi <- trimws(doi)
   
@@ -67,35 +71,83 @@ validate_doi_url <- function(doi) {
   doi_identifier <- doi_match
   doi_url <- sprintf("https://doi.org/%s", doi_identifier)
   
-  tryCatch({
-    response <- GET(
-      doi_url,
-      timeout(10),
-      user_agent("Mozilla/5.0 (compatible; BibliographyChecker/1.0)")
-    )
-    
-    status_code <- status_code(response)
-    
-    if (status_code == 200) {
-      return(list(
-        is_valid = TRUE,
-        error = NULL,
-        status_code = status_code
-      ))
-    } else {
-      return(list(
-        is_valid = FALSE,
-        error = sprintf("DOI URL returned status %d", status_code),
-        status_code = status_code
-      ))
+  # Try up to 3 times for 403 errors
+  max_attempts <- if (retry_on_403) 3 else 1
+  last_error <- NULL
+  
+  for (attempt in 1:max_attempts) {
+    if (attempt > 1) {
+      # Exponential backoff: 2, 4 seconds
+      wait_time <- 2^(attempt - 1)
+      cat(sprintf("    Retrying after %d seconds (attempt %d/%d)...\n", wait_time, attempt, max_attempts))
+      Sys.sleep(wait_time)
     }
-  }, error = function(e) {
-    return(list(
-      is_valid = FALSE,
-      error = sprintf("Error accessing DOI: %s", e$message),
-      status_code = NULL
-    ))
-  })
+    
+    result <- tryCatch({
+      response <- GET(
+        doi_url,
+        timeout(30),
+        user_agent(USER_AGENT)
+      )
+      
+      status_code <- status_code(response)
+      
+      if (status_code == 200) {
+        return(list(
+          is_valid = TRUE,
+          error = NULL,
+          status_code = status_code
+        ))
+      } else if (status_code == 403 && attempt < max_attempts) {
+        # Store error and continue to retry
+        last_error <- list(
+          is_valid = FALSE,
+          error = sprintf("DOI URL returned status %d", status_code),
+          status_code = status_code
+        )
+        NULL  # Continue loop
+      } else {
+        return(list(
+          is_valid = FALSE,
+          error = sprintf("DOI URL returned status %d", status_code),
+          status_code = status_code
+        ))
+      }
+    }, error = function(e) {
+      if (attempt < max_attempts) {
+        # Store error and continue to retry
+        last_error <<- list(
+          is_valid = FALSE,
+          error = sprintf("Error accessing DOI: %s", e$message),
+          status_code = NULL
+        )
+        NULL  # Continue loop
+      } else {
+        return(list(
+          is_valid = FALSE,
+          error = sprintf("Error accessing DOI: %s", e$message),
+          status_code = NULL
+        ))
+      }
+    })
+    
+    # If result is not NULL, it was returned above
+    if (!is.null(result)) {
+      return(result)
+    }
+  }
+  
+  # Return last error if all attempts failed
+  if (!is.null(last_error)) {
+    return(last_error)
+  }
+  
+  # Should not reach here, but return error just in case
+  return(list(
+    is_valid = FALSE,
+    error = "Failed after multiple attempts",
+    status_code = NULL
+  ))
 }
 
 #' Get DOI metadata from CrossRef API
@@ -116,8 +168,8 @@ get_doi_metadata <- function(doi) {
   tryCatch({
     response <- GET(
       api_url,
-      timeout(10),
-      user_agent("Mozilla/5.0 (compatible; BibliographyChecker/1.0)")
+      timeout(30),
+      user_agent(USER_AGENT)
     )
     
     if (status_code(response) == 200) {
@@ -251,6 +303,10 @@ compare_metadata <- function(entry, metadata) {
 check_bibliography_file <- function(filepath, verify_metadata = TRUE) {
   cat(sprintf("\nChecking %s...\n", filepath))
   
+  # Exclusion list: BibTeX keys that don't have DOIs
+  # (e.g., older books where DOIs aren't available)
+  excluded_keys <- c("vapnik1998")
+  
   bib_df <- parse_bibtex_file(filepath)
   if (is.null(bib_df)) {
     return(list(checked_count = 0, errors_count = 1, errors = c("Failed to parse BibTeX file")))
@@ -268,8 +324,19 @@ check_bibliography_file <- function(filepath, verify_metadata = TRUE) {
       next
     }
     
+    # Skip excluded entries
+    if (entry$BIBTEXKEY %in% excluded_keys) {
+      cat(sprintf("  Skipping %s '%s' (in exclusion list)...\n", entry_type, entry$BIBTEXKEY))
+      next
+    }
+    
     checked_count <- checked_count + 1
     cat(sprintf("  Checking %s '%s'...\n", entry_type, entry$BIBTEXKEY))
+    
+    # Add delay before checking to avoid rate limiting
+    if (checked_count > 1) {
+      Sys.sleep(1)
+    }
     
     # Check 1: DOI field exists
     doi_check <- check_doi_field(entry)
