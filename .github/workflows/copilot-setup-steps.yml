@@ -1,4 +1,4 @@
-# GitHub Copilot Setup Steps for quarto-book-template
+# GitHub Copilot Setup Steps for qbt
 #
 # This workflow configures the GitHub Copilot coding agent's environment
 # by preinstalling R, Quarto, TinyTeX, and system dependencies.

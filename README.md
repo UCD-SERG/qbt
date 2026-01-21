@@ -1,4 +1,4 @@
-# Quarto Book Template
+# qbt (Quarto Book Template)
 
 A template repository for creating books with [Quarto](https://quarto.org/). This template is based on the [UCD-SERG/lab-manual](https://github.com/UCD-SERG/lab-manual) structure and provides everything you need to quickly start writing your own book.
 

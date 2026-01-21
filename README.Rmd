@@ -11,7 +11,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Quarto Book Template
+# qbt ([Q]{.underline}uarto [B]{.underline}ook [T]{.underline}emplate)
 
 <!-- badges: start -->
 <!-- badges: end -->
