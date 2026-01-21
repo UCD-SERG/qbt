@@ -142,8 +142,10 @@ for modified chapters - Banner showing what changed in the PR
 **Triggers:** PR opened, reopened, synchronized, closed, labeled, or
 unlabeled
 
-**Labels:** - Add `no-preview-highlights` label to disable change
-highlighting if it’s glitchy
+**Labels:**
+
+- Add `no-preview-highlights` label to disable change highlighting if
+  it’s glitchy
 
 ### ✅ Spell Check Workflow (`check-spelling.yaml`)
 

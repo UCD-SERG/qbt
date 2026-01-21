@@ -139,6 +139,7 @@ Creates a preview deployment for pull requests with:
 **Triggers:** PR opened, reopened, synchronized, closed, labeled, or unlabeled
 
 **Labels:**
+
 - Add `no-preview-highlights` label to disable change highlighting if it's glitchy
 
 ### ✅ Spell Check Workflow (`check-spelling.yaml`)
