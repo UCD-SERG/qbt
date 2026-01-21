@@ -183,9 +183,11 @@ Automatically generates AI-powered summaries for newly opened issues.
 ### 📚 Check Bibliography DOIs Workflow (`check-bibliography-dois.yml`)
 
 Validates that all books and articles in bibliography files meet DOI
-requirements: - Every book and article must have a DOI field - Every DOI
-must resolve to a valid URL - Reference information is checked against
-DOI metadata for consistency
+requirements:
+
+- Every book and article must have a DOI field
+- Every DOI must resolve to a valid URL
+- Reference information is checked against DOI metadata for consistency
 
 **Triggers:** Push to main, pull requests, manual dispatch
 
@@ -235,15 +237,20 @@ to the main branch.
 
 ### Link Checker Workflow (`check-links.yml`)
 
-Automatically checks that all URLs in your book are reachable: - **Runs
-on**: Push to main, pull requests, weekly schedule (Mondays at 9:00
-UTC), and manual trigger - **Checks**: All links in `.qmd`, `.md`, and
-`.html` files - **Reports**: Workflow fails if broken links are
-detected. Check the workflow logs for details on which links are
-broken. - **Configuration**: Customize behavior in `lychee.toml`
+Automatically checks that all URLs in your book are reachable:
 
-To manually trigger the link checker: 1. Go to the Actions tab in your
-repository 2. Select “Check Links” workflow 3. Click “Run workflow”
+- **Runs on**: Push to main, pull requests, weekly schedule (Mondays at
+  9:00 UTC), and manual trigger
+- **Checks**: All links in `.qmd`, `.md`, and `.html` files
+- **Reports**: Workflow fails if broken links are detected. Check the
+  workflow logs for details on which links are broken.
+- **Configuration**: Customize behavior in `lychee.toml`
+
+To manually trigger the link checker:
+
+1.  Go to the Actions tab in your repository
+2.  Select “Check Links” workflow
+3.  Click “Run workflow”
 
 ## Writing Content
 
