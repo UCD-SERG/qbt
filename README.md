@@ -135,9 +135,12 @@ to the main branch.
 
 ### 🔍 PR Preview Workflow (`preview.yml`)
 
-Creates a preview deployment for pull requests with: - Change detection
-and highlighting - DOCX files with tracked changes - Visual indicators
-for modified chapters - Banner showing what changed in the PR
+Creates a preview deployment for pull requests with:
+
+- Change detection and highlighting
+- DOCX files with tracked changes
+- Visual indicators for modified chapters
+- Banner showing what changed in the PR
 
 **Triggers:** PR opened, reopened, synchronized, closed, labeled, or
 unlabeled

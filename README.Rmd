@@ -131,6 +131,7 @@ Automatically builds and deploys your book to GitHub Pages when you push to the 
 ### 🔍 PR Preview Workflow (`preview.yml`)
 
 Creates a preview deployment for pull requests with:
+
 - Change detection and highlighting
 - DOCX files with tracked changes
 - Visual indicators for modified chapters
