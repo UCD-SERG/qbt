@@ -1,12 +1,11 @@
-# GitHub Copilot Setup Steps for lab-manual
+# GitHub Copilot Setup Steps for qbt
 #
 # This workflow configures the GitHub Copilot coding agent's environment
-# by preinstalling R, Quarto and TinyTeX for rendering the lab manual.
+# by preinstalling R, Quarto, TinyTeX, and system dependencies.
 #
 # See: https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-environment
 #
 # This workflow sets up:
-# - R for executing R code chunks in Quarto documents
 # - Quarto CLI for rendering
 # - TinyTeX for PDF output
 
@@ -27,6 +26,8 @@ jobs:
   # The job MUST be called `copilot-setup-steps` or it will not be picked up by Copilot.
   copilot-setup-steps:
     runs-on: ubuntu-latest
+    container:
+      image: rocker/verse:latest
 
     # Set the permissions to the lowest permissions possible needed for your steps.
     # Copilot will be given its own token for its operations.
@@ -38,12 +39,9 @@ jobs:
 
     steps:
       # Checkout code - Copilot will do this automatically if we don't,
-      # but we include it for completeness
+      # but we need it for any repository-specific setup
       - name: Checkout code
         uses: actions/checkout@v4
-
-      # R and renv setup steps disabled for now - we don't have any R code to run yet
-      # When R code is needed, uncomment the following steps:
 
       # Install system dependencies required for R packages
       - name: Install system dependencies
@@ -67,18 +65,12 @@ jobs:
         uses: r-lib/actions/setup-pandoc@v2
 
       # Set up R using the standard GitHub Actions setup
+      # Using 'release' to get the latest R version
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
         with:
           r-version: 'release'
           use-public-rspm: true
-
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y jags libcurl4-openssl-dev libpng-dev libfontconfig1-dev libjpeg-dev
-
-      - uses: r-lib/actions/setup-renv@v2
 
       # Set up Quarto - required for rendering the website
       - name: Set up Quarto
@@ -86,21 +78,24 @@ jobs:
         with:
           tinytex: true
 
-      # # Install R dependencies using renv (disabled for now - no renv.lock file yet)
-      # - name: Install R dependencies via renv
-      #   uses: r-lib/actions/setup-renv@v2
-      #   with:
-      #     cache-version: 1
+      - name: Install R dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: |
+            any::devtools
+            any::rcmdcheck
+            any::lintr
+            any::spelling
+            any::rmarkdown
+          needs: check
 
-      # Verify development environment
+      # Verify development environment is properly configured
       - name: Verify development environment
         run: |
           echo "=== Development Environment Status ==="
 
-          # Verify R is installed and working
-          echo ""
-          echo "=== R Status ==="
-          R --version
+          # Check R installation
+          Rscript -e 'cat("R version:", R.version.string, "\n")'
 
           # Verify Quarto is installed and working
           echo ""
