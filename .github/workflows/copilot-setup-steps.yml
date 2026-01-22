@@ -77,6 +77,17 @@ jobs:
         with:
           tinytex: true
 
+      - name: Install R dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: |
+            any::devtools
+            any::rcmdcheck
+            any::lintr
+            any::spelling
+            any::rmarkdown
+          needs: check
+
       # Verify development environment is properly configured
       - name: Verify development environment
         run: |
