@@ -60,16 +60,6 @@ jobs:
             libjpeg-dev \
             jq
 
-      # Set up pandoc for documentation
-      - name: Set up Pandoc
-        uses: r-lib/actions/setup-pandoc@v2
-
-      # Set up Quarto - required for rendering the website
-      - name: Set up Quarto
-        uses: quarto-dev/quarto-actions/setup@v2
-        with:
-          tinytex: true
-
       - name: Install R dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
@@ -93,6 +83,7 @@ jobs:
           echo ""
           echo "=== Quarto Status ==="
           quarto --version
+          quarto check
           quarto list tools
 
           echo ""
