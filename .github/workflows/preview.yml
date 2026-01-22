@@ -23,7 +23,7 @@ jobs:
           fetch-depth: 0  # Fetch full history for git diff
 
       - name: Install jq
-        run: sudo apt-get install -y jq
+        run: sudo apt-get update && sudo apt-get install -y jq
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2

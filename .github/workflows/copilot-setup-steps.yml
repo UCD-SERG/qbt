@@ -55,7 +55,8 @@ jobs:
             libfreetype6-dev \
             libpng-dev \
             libtiff5-dev \
-            libjpeg-dev
+            libjpeg-dev \
+            jq
       
       # Set up pandoc for documentation
       - name: Set up Pandoc
@@ -68,10 +69,6 @@ jobs:
         with:
           r-version: 'release'
           use-public-rspm: true
-      
-      # Install jq - required by quarto-actions/setup
-      - name: Install jq
-        run: sudo apt-get install -y jq
       
       # Set up Quarto - required for rendering the website
       - name: Set up Quarto
