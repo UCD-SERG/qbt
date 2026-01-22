@@ -45,6 +45,7 @@ Use `code-fold: true` for code chunks where the output is what's important to th
 - Data preparation or cleaning code that produces a summary table
 - Long or complex code that would distract from the narrative
 - Code that generates output (plots, tables, results) that readers need to see
+- When users need to see the console output
 
 **When NOT to use `code-fold: true`:**
 
