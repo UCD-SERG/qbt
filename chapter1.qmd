@@ -27,15 +27,20 @@ def hello_world():
 hello_world()
 ```
 
-Or R code:
+Or R code with folded code (click "Code" to expand):
 
-```r
-# Example R code
+```{r}
+#| code-fold: true
+#| fig-cap: "Relationship between weight and miles per gallon"
+#| eval: false
+
+# Example R code - the plot is more important than the code
 library(ggplot2)
 
 ggplot(mtcars, aes(x = wt, y = mpg)) +
   geom_point() +
-  theme_minimal()
+  theme_minimal() +
+  labs(x = "Weight (1000 lbs)", y = "Miles per Gallon")
 ```
 
 ## Section 1.3
