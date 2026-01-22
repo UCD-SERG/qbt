@@ -68,7 +68,7 @@ This document identifies potential areas for improvement in the qbt (Quarto Book
 **File**: `.github/scripts/highlight-html-changes.py` (lines 273-277)
 - **Issue**: Uses regex for HTML manipulation with `count=1`
 - **Problem**: Wrong element could be replaced if HTML content repeats
-- **Recommendation**: Use HTML parser instead of regex
+- **Recommendation**: Use HTML parser (e.g., BeautifulSoup) instead of regex
 
 **File**: `.github/scripts/create-docx-tracked-changes.py` (lines 86-87)
 - **Issue**: Compares only paragraph text, not formatting or tables
@@ -149,7 +149,7 @@ This document identifies potential areas for improvement in the qbt (Quarto Book
 ### HTML Parsing Complexity
 - **File**: `highlight-html-changes.py` (200+ lines of regex-based parsing)
 - **Issue**: Fragile and hard to maintain
-- **Recommendation**: Replace with proper HTML parsing using `html.parser.HTMLParser` or `lxml`
+- **Recommendation**: Replace with proper HTML parsing using BeautifulSoup (`from bs4 import BeautifulSoup`) or `lxml`
 
 ## 9. Configuration & Usability Issues
 
