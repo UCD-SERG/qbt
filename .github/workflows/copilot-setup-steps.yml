@@ -1,4 +1,4 @@
-# GitHub Copilot Setup Steps for quarto-book-template
+# GitHub Copilot Setup Steps for qbt
 #
 # This workflow configures the GitHub Copilot coding agent's environment
 # by preinstalling R, Quarto, TinyTeX, and system dependencies.
@@ -26,21 +26,23 @@ jobs:
   # The job MUST be called `copilot-setup-steps` or it will not be picked up by Copilot.
   copilot-setup-steps:
     runs-on: ubuntu-latest
-    
+    container:
+      image: rocker/verse:latest
+
     # Set the permissions to the lowest permissions possible needed for your steps.
     # Copilot will be given its own token for its operations.
     permissions:
       contents: read
-    
+
     # Timeout after 55 minutes (max is 59 for copilot-setup-steps)
     timeout-minutes: 55
-    
+
     steps:
       # Checkout code - Copilot will do this automatically if we don't,
       # but we need it for any repository-specific setup
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       # Install system dependencies required for R packages
       - name: Install system dependencies
         run: |
@@ -55,39 +57,34 @@ jobs:
             libfreetype6-dev \
             libpng-dev \
             libtiff5-dev \
-            libjpeg-dev
-      
-      # Set up pandoc for documentation
-      - name: Set up Pandoc
-        uses: r-lib/actions/setup-pandoc@v2
-      
-      # Set up R using the standard GitHub Actions setup
-      # Using 'release' to get the latest R version
-      - name: Set up R
-        uses: r-lib/actions/setup-r@v2
+            libjpeg-dev \
+            jq
+
+      - name: Install R dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          r-version: 'release'
-          use-public-rspm: true
-      
-      # Set up Quarto - required for rendering the website
-      - name: Set up Quarto
-        uses: quarto-dev/quarto-actions/setup@v2
-        with:
-          tinytex: true
-      
+          extra-packages: |
+            any::devtools
+            any::rcmdcheck
+            any::lintr
+            any::spelling
+            any::rmarkdown
+          needs: check
+
       # Verify development environment is properly configured
       - name: Verify development environment
         run: |
           echo "=== Development Environment Status ==="
-          
+
           # Check R installation
           Rscript -e 'cat("R version:", R.version.string, "\n")'
-          
+
           # Verify Quarto is installed and working
           echo ""
           echo "=== Quarto Status ==="
           quarto --version
+          quarto check
           quarto list tools
-          
+
           echo ""
           echo "Development environment setup complete!"
