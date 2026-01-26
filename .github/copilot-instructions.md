@@ -45,13 +45,13 @@ Use `code-fold: true` for code chunks where the output is what's important to th
 - Data preparation or cleaning code that produces a summary table
 - Long or complex code that would distract from the narrative
 - Code that generates output (plots, tables, results) that readers need to see
-- When users need to see the console output
 
 **When NOT to use `code-fold: true`:**
 
 - Tutorial code where readers need to learn the syntax
 - Short, simple examples that are part of the explanation
 - Code that is the main focus of the section
+- When the console output is part of the main content (unformatted tables, model summaries, etc.)
 
 **Example:**
 
