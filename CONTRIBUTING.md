@@ -69,11 +69,16 @@ When adding external links to your content, please ensure:
 3. **Check link stability** - Use permanent links (permalinks) when available rather than URLs that might change
 
 The link checker workflow will automatically:
+
 - Check all URLs in `.qmd`, `.md`, and `.html` files
 - Report broken or unreachable links
 - Create issues for broken links that need attention
 
 If you need to exclude certain URLs from checking (e.g., example URLs), add them to the `lychee.toml` configuration file.
+
+#### Manual override for link checking
+
+If you have manually verified all links in your pull request and want to skip the automated link checker, you can add the **`links checked by hand`** label to your PR. This will cause the link checker workflow to skip the check for that specific pull request, while still running on the main branch and scheduled checks.
 
 ### Citations
 
