@@ -231,6 +231,7 @@ Automatically checks that all URLs in your book are reachable:
 - **Checks**: All links in `.qmd`, `.md`, and `.html` files
 - **Reports**: Workflow fails if broken links are detected. Check the workflow logs for details on which links are broken.
 - **Configuration**: Customize behavior in `lychee.toml`
+- **Manual override**: Add the `links checked by hand` label to a PR to skip the automated link check
 
 To manually trigger the link checker:
 
