@@ -16,12 +16,32 @@ jobs:
     permissions:
       contents: read
       issues: write
+      pull-requests: read
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Check for manual override label
+        id: check-label
+        if: github.event_name == 'pull_request'
+        run: |
+          LABEL_EXISTS=$(gh pr view "${{ github.event.pull_request.number }}" --json labels --jq '.labels[].name' | grep -q "links checked by hand" && echo "true" || echo "false")
+          echo "skip=$LABEL_EXISTS" >> "$GITHUB_OUTPUT"
+          if [ "$LABEL_EXISTS" = "true" ]; then
+            echo "Manual override enabled: 'links checked by hand' label found"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Skip message
+        if: github.event_name == 'pull_request' && steps.check-label.outputs.skip == 'true'
+        run: |
+          echo "::notice::Links check skipped - 'links checked by hand' label present on PR"
+          exit 0
+
       - name: Check links in markdown and HTML files
         id: lychee
+        if: github.event_name != 'pull_request' || steps.check-label.outputs.skip != 'true'
         uses: lycheeverse/lychee-action@v2
         with:
           # Check all .qmd (Quarto markdown), .md (markdown), and .html files
