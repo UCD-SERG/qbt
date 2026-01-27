@@ -2,6 +2,12 @@
 
 This file provides custom instructions for GitHub Copilot when working in this repository.
 
+## General Guidelines
+
+Follow the guidance in the [UCD-SERG Lab Manual](https://ucd-serg.github.io/lab-manual/).
+
+The source files for the lab manual are available at <https://github.com/UCD-SERG/lab-manual> if easier to read.
+
 ## Style Guidelines
 
 ### Lists
